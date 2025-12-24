@@ -320,13 +320,9 @@ def resend_verification_email():
     try:
         user = User.query.filter_by(email=email).one()
     except NoResultFound:
-        def sanitize(value):
-              return value.replace('\n', '\\n').replace('\r', '\\r')
-        safe_mail = sanitize(email)
-        logger.error("User with email: %s not found", safe_mail)
-
+        logging.info('User with email: ' + email + ' not found.')
         raise UnprocessableEntityError(
-            {'source': ''}, 'User with email: %s not found.'%safe_mail
+            {'source': ''}, 'User with email: ' + email + ' not found.'
         )
     else:
         serializer = get_serializer()
